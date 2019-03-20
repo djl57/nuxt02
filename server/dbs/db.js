@@ -1,5 +1,7 @@
 // db库  封装
-const MongoClient = require('mongodb').MongoClient
+const MongoDB = require('mongodb')
+const MongoClient = MongoDB.MongoClient
+const ObjectID = MongoDB.ObjectID
 const assert = require('assert');
 const config = require('./config')
 
@@ -108,6 +110,10 @@ class Db {
         })
       })
     })
+  }
+
+  getObjectId(id) {
+    return new ObjectID(id)
   }
 
   indexCollection(collectionName, json) { // 创建索引
