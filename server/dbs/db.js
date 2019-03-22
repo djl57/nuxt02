@@ -25,7 +25,7 @@ class Db {
         client.connect((err) => {
           assert.equal(null, err);
           if (!err) {
-            console.log("Connected successfully to server");
+            console.log("成功连接数据库");
             const db = client.db(config.dbName);
             this.dbClient = db
             resolve(this.dbClient)

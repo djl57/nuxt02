@@ -5,6 +5,7 @@
         <h3>待完成</h3>
         <p v-for="(item, idx) in beDoneList" :key="idx">
           <span class="lf">{{ item.content }}</span>
+          <span @click="remove(item._id)" class="rt">彻底删除</span>
           <span @click="del(item._id)" class="rt">删除</span>
           <span @click="done(item._id)" class="rt">完成</span>
         </p>
@@ -21,6 +22,7 @@
         <h3>已删除</h3>
         <p v-for="(item, idx) in delList" :key="idx">
           <span class="lf">{{ item.content }}</span>
+          <span @click="remove(item._id)" class="rt">彻底删除</span>
           <span @click="beDone(item._id)" class="rt">恢复</span>
         </p>
       </div>
@@ -59,41 +61,46 @@ export default {
   },
   methods: {
     async add() {
-      const time = getNowTime()
-      const { data: {code} } = await this.$axios.post('/todo/add', {
+      const data = {
         content: this.event,
-        createTime: time,
+        createTime: getNowTime(),
         status: 0
-      })
+      }
+      const { data: {code} } = await Todo.add(data)
       if (code === OK) {
-        const { status, data: {list} } = await this.$axios.get('/todo/list')
+        const { status, data: {list} } = await Todo.getList()
         this.list = list
       }
     },
     async del(id) {
-      const { data: {code} } = await this.$axios.post('/todo/del', {
-        _id: id
-      })
+      const data = { _id: id }
+      const { data: {code} } = await Todo.del(data)
       if (code === OK) {
-        const { status, data: {list} } = await this.$axios.get('/todo/list')
+        const { status, data: {list} } = await Todo.getList()
         this.list = list
       }
     },
     async done(id) {
-      const { data: {code} } = await this.$axios.post('/todo/done', {
-        _id: id
-      })
+      const data = { _id: id }
+      const { data: {code} } = await Todo.done(data)
       if (code === OK) {
-        const { status, data: {list} } = await this.$axios.get('/todo/list')
+        const { status, data: {list} } = await Todo.getList()
         this.list = list
       }
     },
     async beDone(id) {
-      const { data: {code} } = await this.$axios.post('/todo/beDone', {
-        _id: id
-      })
+      const data = { _id: id }
+      const { data: {code} } = await Todo.beDone(data)
       if (code === OK) {
-        const { status, data: {list} } = await this.$axios.get('/todo/list')
+        const { status, data: {list} } = await Todo.getList()
+        this.list = list
+      }
+    },
+    async remove(id) {
+      const data = { _id: id }
+      const { data: {code} } = await Todo.remove(data)
+      if (code === OK) {
+        const { status, data: {list} } = await Todo.getList()
         this.list = list
       }
     }

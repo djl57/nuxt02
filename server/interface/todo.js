@@ -60,4 +60,14 @@ router.post('/beDone', async ctx => {
   }
 })
 
+router.post('/remove', async ctx => {
+  const { _id } = ctx.request.body
+  const res = await DB.remove(collectionName, { "_id": DB.getObjectId(_id) })
+  if (res.result.ok === 1) {
+    ctx.body = { code: 0, msg: '彻底删除成功' }
+  } else {
+    ctx.body = { code: 1, msg: '彻底删除失败' }
+  }
+})
+
 module.exports = router
